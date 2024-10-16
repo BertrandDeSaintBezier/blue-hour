@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "blue_hour", "blue_hour.vcxproj", "{CC059C77-E7CF-445F-8501-83000A5F9B05}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC059C77-E7CF-445F-8501-83000A5F9B05}.Debug|x86.ActiveCfg = Debug|Win32
+		{CC059C77-E7CF-445F-8501-83000A5F9B05}.Debug|x86.Build.0 = Debug|Win32
+		{CC059C77-E7CF-445F-8501-83000A5F9B05}.Release|x86.ActiveCfg = Release|Win32
+		{CC059C77-E7CF-445F-8501-83000A5F9B05}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {23EBF926-6CDE-4BF3-9284-C54C3F504E80}
+	EndGlobalSection
+EndGlobal
