@@ -2,6 +2,8 @@
 #include<SDL.h>
 #include<stdio.h>
 
+#include "vertex.h"
+
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
@@ -15,10 +17,12 @@ typedef struct {
 extern int display_pitch;
 extern uint32_t* pixel_buffer;
 
-extern display_components_t* setup_sdl_components(display_components_t* sdl_components);
+extern display_components_t* setup_sdl_components(display_components_t*);
 
-void draw_grid();
+extern void render_loop(display_components_t*, vertex_t* vertices, size_t count);
 
-void draw_background();
+extern void draw_grid();
+extern void draw_background();
+extern void draw_vertex(vertex_t* vertices, size_t count);
 
-extern void render_loop(display_components_t* display);
+extern void cleanup_sdl_components(display_components_t*);

@@ -136,10 +136,20 @@
     <ClCompile Include="controls.c" />
     <ClCompile Include="display.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="mesh.c" />
+    <ClCompile Include="triangle.c" />
+    <ClCompile Include="update.c" />
+    <ClCompile Include="vector.c" />
+    <ClCompile Include="vertex.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controls.h" />
     <ClInclude Include="display.h" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="triangle.h" />
+    <ClInclude Include="update.h" />
+    <ClInclude Include="vector.h" />
+    <ClInclude Include="vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

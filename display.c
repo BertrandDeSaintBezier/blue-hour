@@ -1,9 +1,9 @@
 #include "display.h"
 
-int display_pitch = (int)(WINDOW_WIDTH * sizeof(uint32_t));
+size_t display_pitch;
 uint32_t* pixel_buffer = NULL;
 
-display_components_t* setup_sdl_components(display_components_t* sdl_components) {
+display_components_t* setup_sdl_components(display_components_t* display) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		fprintf(stderr, "There was an error initializing SDL.\n");
 		return NULL;
@@ -15,41 +15,41 @@ display_components_t* setup_sdl_components(display_components_t* sdl_components)
 		return NULL;
 	}
 
-	sdl_components->window = SDL_CreateWindow(
-		"blue_hour",
+	display->window = SDL_CreateWindow(
+		NULL,
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		WINDOW_WIDTH,
 		WINDOW_HEIGHT,
-		0
+		SDL_WINDOW_BORDERLESS
 	);
 
-	if (sdl_components->window == NULL) {
+	if (display->window == NULL) {
 		fprintf(stderr, "There was an error creating the window.\n");
 		return NULL;
 	}
 
-	sdl_components->renderer = SDL_CreateRenderer(sdl_components->window, -1, 0);
+	display->renderer = SDL_CreateRenderer(display->window, -1, 0);
 
-	if (sdl_components->renderer == NULL) {
+	if (display->renderer == NULL) {
 		fprintf(stderr, "There was an error creating the renderer.\n");
 		return NULL;
 	}
 
-	sdl_components->texture = SDL_CreateTexture(
-		sdl_components->renderer,
-		SDL_PIXELFORMAT_ABGR8888,
+	display->texture = SDL_CreateTexture(
+		display->renderer,
+		SDL_PIXELFORMAT_ARGB8888,
 		SDL_TEXTUREACCESS_STREAMING,
 		WINDOW_WIDTH,
 		WINDOW_HEIGHT
 	);
 
-	if (sdl_components->texture == NULL) {
+	if (display->texture == NULL) {
 		fprintf(stderr, "There was an error creating the frame buffer texture.\n");
 		return NULL;
 	}
 
-	return sdl_components;
+	return display;
 }
 
 void draw_grid() {
@@ -61,21 +61,38 @@ void draw_grid() {
 }
 
 void draw_background() {
-	for (size_t y = 0; y < WINDOW_HEIGHT; y++) {
-		for (size_t x = 0; x < WINDOW_WIDTH; x++) {
-			pixel_buffer[(WINDOW_WIDTH * y) + x] = 0xFF000000;
+	for (size_t i = 0; i < WINDOW_WIDTH * WINDOW_HEIGHT; i++) {
+		pixel_buffer[i] = 0xFF000000;
+	}
+}
+
+void draw_vertex(vertex_t* vertices, size_t count) {
+	for (size_t i = 0; i < count; i++) {
+		vertex_t vertex = vertices[i];
+		project_vertex(&vertex);
+		float vertex_area = 4.0f;// / (vertex.world_pos.z <= 0 ? 1 : vertex.world_pos.z);
+		for (size_t y = vertex.projected_pos.y; y < vertex.projected_pos.y + vertex_area; y++) {
+			for (size_t x = vertex.projected_pos.x; x < vertex.projected_pos.x + vertex_area; x++) {
+				pixel_buffer[(WINDOW_WIDTH * y) + x] = 0xFFFF0000;
+			}
 		}
 	}
 }
 
-void render_loop(display_components_t* display)
-{
+void render_loop(display_components_t* display, vertex_t* vertices, size_t count) {
 	SDL_LockTexture(display->texture, NULL, (void**)&pixel_buffer, &display_pitch);
 
 	draw_background();
 	draw_grid();
+	draw_vertex(vertices, count);
 
 	SDL_UnlockTexture(display->texture);
 	SDL_RenderCopy(display->renderer, display->texture, NULL, NULL);
 	SDL_RenderPresent(display->renderer);
+}
+
+void cleanup_sdl_components(display_components_t* display) {
+	SDL_DestroyWindow(display->window);
+	SDL_DestroyTexture(display->texture);
+	SDL_DestroyRenderer(display->texture);
 }
